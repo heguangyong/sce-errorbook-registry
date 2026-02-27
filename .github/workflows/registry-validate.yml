@@ -19,3 +19,6 @@ jobs:
 
       - name: Validate registry JSON
         run: node scripts/validate-registry.js
+
+      - name: Enforce index coverage gate
+        run: node scripts/check-index-coverage.js --min-coverage 85

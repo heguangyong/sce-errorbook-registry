@@ -48,6 +48,7 @@ registry/
 ## Validation
 
 GitHub Actions validates JSON structure and required fields on every push/PR.
+- Coverage gate: index coverage must be >= 85% by default.
 
 ## Index/Shard Build
 
@@ -62,4 +63,5 @@ Manual run:
 ```bash
 node scripts/rebuild-index.js --write
 node scripts/validate-registry.js
+node scripts/check-index-coverage.js --min-coverage 85
 ```

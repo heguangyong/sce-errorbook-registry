@@ -1,0 +1,42 @@
+name: Rebuild Registry Index
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  rebuild:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Rebuild index and shards
+        run: node scripts/rebuild-index.js --write
+
+      - name: Validate registry JSON
+        run: node scripts/validate-registry.js
+
+      - name: Commit generated changes
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add registry/errorbook-registry.json registry/errorbook-registry.index.json registry/shards scripts/rebuild-index.js scripts/validate-registry.js README.md
+            git commit -m "chore(registry): rebuild index and shards [skip ci]"
+            git push
+          else
+            echo "No generated changes."
+          fi

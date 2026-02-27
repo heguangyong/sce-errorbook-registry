@@ -18,6 +18,7 @@ registry/
     order.json
     payment.json
     auth.json
+    *.json (auto-generated buckets)
 ```
 
 ## Governance Rules
@@ -47,3 +48,18 @@ registry/
 ## Validation
 
 GitHub Actions validates JSON structure and required fields on every push/PR.
+
+## Index/Shard Build
+
+- `scripts/rebuild-index.js` is the canonical generator for:
+  - `registry/errorbook-registry.index.json`
+  - `registry/shards/*.json`
+- It seeds three stable domain buckets (`order`, `payment`, `auth`) and adds dynamic buckets as entries grow.
+- `registry-rebuild` workflow runs on `main` push (or manual trigger), rebuilds, validates, and commits generated changes.
+
+Manual run:
+
+```bash
+node scripts/rebuild-index.js --write
+node scripts/validate-registry.js
+```

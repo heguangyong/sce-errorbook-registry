@@ -1,6 +1,6 @@
 {
   "api_version": "sce.errorbook.registry-index/v0.1",
-  "generated_at": "2026-02-27T06:35:04.412Z",
+  "generated_at": "2026-02-27T06:37:56.403Z",
   "min_token_length": 2,
   "token_to_bucket": {
     "order": "order",
